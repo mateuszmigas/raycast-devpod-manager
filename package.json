@@ -8,9 +8,15 @@
   "license": "MIT",
   "commands": [
     {
-      "name": "index",
-      "title": "Show List and Detail",
-      "description": "Template for showing a static list and a detail view",
+      "name": "showProviders",
+      "title": "Providers",
+      "description": "Showing list of dev pod providers",
+      "mode": "view"
+    },
+    {
+      "name": "showWorkspaces",
+      "title": "Workspaces",
+      "description": "Showing list of dev pod workspaces",
       "mode": "view"
     }
   ],

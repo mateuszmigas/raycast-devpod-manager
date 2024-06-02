@@ -1,11 +1,6 @@
-import { List } from "@raycast/api";
-import { devPodApi } from "./devPodApi";
+import { List, Icon } from "@raycast/api";
+import { devPodApi } from "./utils/devPodApi";
 import { usePromise } from "@raycast/utils";
-
-//commands
-//Providers
-//Workspaces -> options on workspaces
-//Create Workspace
 
 export default function Command() {
   const { data } = usePromise(() => devPodApi.getProviders());
@@ -17,6 +12,10 @@ export default function Command() {
           key={provider.name}
           title={provider.name}
           subtitle={`${provider.version} - ${provider.description}`}
+          icon={{
+            source: Icon.CheckCircle,
+            tintColor: provider.default ? "#00FF00" : undefined,
+          }}
         />
       ))}
     </List>

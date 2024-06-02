@@ -31,7 +31,7 @@ export type DevPodProvider = {
 };
 
 export type DevPodWorkspace = {
-  name: DevPodIdeName;
+  name: string;
   source: string;
   machine: string;
   provider: DevPodProviderName;
@@ -45,23 +45,38 @@ const getProviders = async (): Promise<DevPodProvider[]> => {
   const shellResult = await executeShell(command);
   const table = parseStringAsTable(shellResult);
 
-  return table.map(
-    (row) =>
-      ({
-        name: row[0],
-        version: row[1],
-        default: parseBoolean(row[2]),
-        initialized: parseBoolean(row[3]),
-        description: row[4],
-      }) as DevPodProvider,
-  );
+  return table.map((row) => {
+    const provider: DevPodProvider = {
+      name: row[0] as DevPodProviderName,
+      version: row[1],
+      default: parseBoolean(row[2]),
+      initialized: parseBoolean(row[3]),
+      description: row[4],
+    };
+    return provider;
+  });
 };
 
-// const createWorkspace = async (location: string, name: string, provider: DevPodProviderName, ide: DevPodIdeName) => {
-//   const command = `devpod create ${location} --name=${name} --provider=${provider} --ide=${ide}`;
-//   //   await executeShell(command);
-// };
+const getWorkspaces = async (): Promise<DevPodWorkspace[]> => {
+  const command = "devpod list";
+  const shellResult = await executeShell(command);
+  const table = parseStringAsTable(shellResult);
+
+  return table.map((row) => {
+    const workspace: DevPodWorkspace = {
+      name: row[0],
+      source: row[1],
+      machine: row[2],
+      provider: row[3] as DevPodProviderName,
+      ide: row[4] as DevPodIdeName,
+      lastUsed: row[5],
+      age: row[6],
+    };
+    return workspace;
+  });
+};
 
 export const devPodApi = {
   getProviders,
+  getWorkspaces,
 };
